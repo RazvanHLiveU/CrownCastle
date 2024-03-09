@@ -2,6 +2,7 @@ package com.crowncastle.crowncastle.tests;
 
 import com.crowncastle.crowncastle.pages.CheckersPage;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -21,7 +22,16 @@ public class CheckersTests {
     @Test
     @Order(1)
     void checkPageIsUp(){
-        System.out.print("code from here");
+        //checking if the page url is correct
+       assert checkersPage.isPageLoaded();
+       System.out.println("Page loaded");
+       //to make sure that elements are visible we will also check for the "Checkers" title
+       assert checkersPage.isTitleVisible();
+        // Finally we will also check if the DOM of the page marks the page load as completed
+        JavascriptExecutor j = (JavascriptExecutor) driver;
+        System.out.println(j.executeScript("return document.readyState").toString());
+        assert j.executeScript("return document.readyState").toString().equals("complete");
+
     }
 
     @AfterAll()
