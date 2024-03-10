@@ -36,7 +36,6 @@ public class CheckersTests {
         JavascriptExecutor j = (JavascriptExecutor) driver;
         //System.out.println(j.executeScript("return document.readyState").toString());
         assert j.executeScript("return document.readyState").toString().equals("complete");
-
     }
 
     @Test
