@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.time.Duration;
+import java.util.Objects;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -54,21 +55,38 @@ public class CheckersTests {
     @Test
     @Order(3)
     void makeRestOfMoves() throws InterruptedException {
-        int movesMade = 1;
         //waiting for the computer to make a move
         Thread.sleep(1200);
-        //checking if we can make a move with the "Make Move" message
         assert checkersPage.canMakeMove();
+        int movesMade = 1;
+        boolean gotBlue = false;
+        while(movesMade < 5 || !gotBlue) {
+            String[][] board = checkersPage.getCurrentBoard();
+            if(checkersPage.didGetBlue(board)) {
+                //waiting for the computer to make a move
+                Thread.sleep(1200);
+                gotBlue = true;
+                movesMade ++;
+            }
+            checkersPage.makeAnyMove(board);
+            //waiting for the computer to make a move
+            Thread.sleep(3200);
+            movesMade++;
+            //check if we can still make moves - maybe the game ended
+            if(!checkersPage.canMakeMove() && !Objects.equals(checkersPage.getMessage(), "Please wait.")) {
+                System.out.println("Game Over");
+                break;
+
+            }
+
+        }
+         assert movesMade >= 5;
+         assert gotBlue;
+
 
     }
 
-    @Test
-    void testing() throws InterruptedException {
-        String[][] board = checkersPage.getCurrentBoard();
-        checkersPage.voidMakeAnyMove(board);
 
-        Thread.sleep(1200);
-    }
 
     @Test
     @Order(4)

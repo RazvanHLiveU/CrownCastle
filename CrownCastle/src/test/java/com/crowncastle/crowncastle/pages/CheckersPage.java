@@ -18,7 +18,7 @@ public class CheckersPage {
     WebDriverWait w;
 
     public String page_url = "https://www.gamesforthebrain.com/game/checkers/";
-    final static String makeMoveMessage = "Make a move.";
+    final public String makeMoveMessage = "Make a move.";
     final public String initialMessage = "Select an orange piece to move.";
 
     final  public String orangePieceMoved = "https://www.gamesforthebrain.com/game/checkers/you2.gif";
@@ -114,29 +114,32 @@ public class CheckersPage {
     }
 
     //This method will make any available move with the orange checker
-    public void voidMakeAnyMove(String[][] board) throws InterruptedException {
+    public void makeAnyMove(String[][] board) throws InterruptedException {
 
         int i;
         int j;
         for (i = 0; i<=7; i++ ) {
             for(j = 0; j<=7; j++) {
                 if(Objects.equals(board[i][j], "orange")) {
-                    //checking if we can move to the up left diagonal one space
-                    if(i+1 <=7 && j+1<=7) {
-                      if(board[i+1][j+1].equals("empty")) {
-                          driver.findElement(By.xpath("//img[@name='space" + i + j + "']")).click();
-                          Thread.sleep(100);
-                          driver.findElement(By.xpath("//img[@name='space" + (i+1) + (j+1) + "']")).click();
-                          //we moved once, no need to continue
-                          break;
-                      }
-                    }
+
                     //checking if we can move to the up right diagonal
+                    //check for out of bounds first
                     if(i-1 >=0 && j-1>=0) {
                         if(board[i-1][j-1].equals("empty")) {
                             driver.findElement(By.xpath("//img[@name='space" + i + j + "']")).click();
                             Thread.sleep(100);
-                            driver.findElement(By.xpath("//img[@name='space" + (i-1) + (j-11) + "']")).click();
+                            driver.findElement(By.xpath("//img[@name='space" + (i-1) + (j-1) + "']")).click();
+                            //we moved once, no need to continue
+                            break;
+                        }
+                    }
+                    //checking if we can move to the up left diagonal one space
+                    //check for out of bounds first
+                    if(i+1 <=7 && j+1<=7) {
+                        if(board[i+1][j+1].equals("empty")) {
+                            driver.findElement(By.xpath("//img[@name='space" + i + j + "']")).click();
+                            Thread.sleep(100);
+                            driver.findElement(By.xpath("//img[@name='space" + (i+1) + (j+1) + "']")).click();
                             //we moved once, no need to continue
                             break;
                         }
@@ -147,7 +150,54 @@ public class CheckersPage {
         }
     }
 
-   
+    //this function tries to get a blue
+   public boolean didGetBlue(String[][] board) throws InterruptedException {
+
+        int i;
+        int j;
+        for (i = 0; i<=7; i++ ) {
+            for(j = 0; j<=7; j++) {
+                if(Objects.equals(board[i][j], "orange")) {
+                    //checking if we can move to the up left diagonal one space
+                    //check for out of bounds first
+                    if(i+1 <=7 && j+1<=7) {
+                        if(board[i+1][j+1].equals("blue")) {
+
+                            //checking if next available space is empty and not out of bounds first
+                            if(i+2 <=7 && j+2<=7) {
+                                if(board[i+2][j+2].equals("empty")) {
+                                    driver.findElement(By.xpath("//img[@name='space" + i + j + "']")).click();
+                                    Thread.sleep(100);
+                                    driver.findElement(By.xpath("//img[@name='space" + (i+2) + (j+2) + "']")).click();
+                                    //we got a blue, we can stop
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    //checking if we can move to the up right diagonal
+                    //check for out of bounds first
+                    if(i-1 >=0 && j-1>=0) {
+                        if(board[i-1][j-1].equals("blue")) {
+                            //checking if next available space is empty and not out of bounds first
+                            if(i-2 >=0 && j-2>=0) {
+                                if(board[i-2][j-2].equals("empty")) {
+                                    driver.findElement(By.xpath("//img[@name='space" + i + j + "']")).click();
+                                    Thread.sleep(100);
+                                    driver.findElement(By.xpath("//img[@name='space" + (i-2) + (j-2) + "']")).click();
+                                    //we got a blue, we can stop
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        //we couldn't get any blue pieces so we stop
+    return false;
+    }
 
 
 
