@@ -34,6 +34,15 @@ public class DeckOfCardsTests {
         assert j.executeScript("return document.readyState").toString().equals("complete");
     }
 
+    @Test
+    @Order(2)
+    void getDeck() {
+       cardsPage.getNewDeck();
+       System.out.println(cardsPage.deckID);
+       //to test if the API was successful we will see if the deck id was set properly -> different from null
+        assert cardsPage.deckID != null;
+    }
+
     @AfterAll()
     void quit() {
         driver.quit();
