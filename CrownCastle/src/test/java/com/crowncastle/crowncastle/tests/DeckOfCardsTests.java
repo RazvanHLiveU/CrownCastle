@@ -43,6 +43,19 @@ public class DeckOfCardsTests {
         assert cardsPage.deckID != null;
     }
 
+    @Test
+    @Order(3)
+    void shuffleDeck() {
+        //first we will check if the deck was created, otherwise the other tests should fail as well so no need to continue
+        assert cardsPage.deckID != null;
+        //running API for shuffling deck
+        cardsPage.shuffleDeck();
+        //check if shuffled successfully
+        assert cardsPage.isShuffled;
+        assert cardsPage.isShuffledWithSuccess;
+
+    }
+
     @AfterAll()
     void quit() {
         driver.quit();

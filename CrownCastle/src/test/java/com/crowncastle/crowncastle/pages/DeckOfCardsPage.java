@@ -23,6 +23,8 @@ public class DeckOfCardsPage {
 
     public String PAGE_URL = "https://deckofcardsapi.com/";
     public String deckID;
+    public boolean isShuffled = false;
+    public boolean isShuffledWithSuccess = false;
 
     private String apiURL = "https://deckofcardsapi.com/api/deck/";
 
@@ -91,15 +93,50 @@ public class DeckOfCardsPage {
 
             }
 
-
-
-
         } catch (Exception e)
         {
             System.out.println("Error" + e);
         }
+    }
 
+    public void shuffleDeck() {
+        if(deckID != null ) {
+            try {
+                URL url = new URL(apiURL + deckID +"/shuffle/");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.connect();
 
+                //checking if connection is ok
+                int responseCode = conn.getResponseCode();
+
+                //200 OK
+                if(responseCode != 200) {
+                    throw new RuntimeException("HttpResponseCode:" + responseCode);
+                }
+                else {
+                    //start decoding the response
+                    StringBuilder informationString = new StringBuilder();
+                    Scanner scanner =  new Scanner(url.openStream());
+                    while(scanner.hasNext()) {
+                        informationString.append(scanner.nextLine());
+                    }
+                    //closing the scanner after appending the entire response
+                    scanner.close();
+                    System.out.println(informationString);
+
+                    //convert string to JSON using JSON Simple library
+                    JSONParser parse = new JSONParser();
+                    JSONObject deckData = (JSONObject) parse.parse(String.valueOf(informationString));
+                    isShuffled = Boolean.parseBoolean(deckData.get("shuffled").toString());
+                    isShuffledWithSuccess = Boolean.parseBoolean(deckData.get("success").toString());
+                }
+
+            } catch (Exception e)
+            {
+                System.out.println("Error" + e);
+            }
+        }
 
 
     }
