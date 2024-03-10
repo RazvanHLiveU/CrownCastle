@@ -20,6 +20,7 @@ public class CheckersPage {
     public String page_url = "https://www.gamesforthebrain.com/game/checkers/";
     final public String makeMoveMessage = "Make a move.";
     final public String initialMessage = "Select an orange piece to move.";
+    final public String pleaseWaitMessage = "Please wait.";
 
     final  public String orangePieceMoved = "https://www.gamesforthebrain.com/game/checkers/you2.gif";
     final public String orangePieceInitial = "https://www.gamesforthebrain.com/game/checkers/you1.gif";
@@ -76,7 +77,6 @@ public class CheckersPage {
     }
 
     public  boolean canMakeMove(){
-        System.out.println(getMessage());
         return getMessage().equals(makeMoveMessage);
     }
 
@@ -199,8 +199,24 @@ public class CheckersPage {
     return false;
     }
 
+    public boolean checkInitialBoard(String[][] currentBoard) {
 
+        String[][] initialBoard = new String[][] {{"orange","black","orange","black","empty","black","blue","black"},
+                {"black","orange","black","empty","black","blue","black","blue"},
+                {"orange","black","orange","black","empty","black","blue","black"},
+                {"black","orange","black","empty","black","blue","black","blue"},
+                {"orange","black","orange","black","empty","black","blue","black"},
+                {"black","orange","black","empty","black","blue","black","blue"},
+                {"orange","black","orange","black","empty","black","blue","black"},
+                {"black","orange","black","empty","black","blue","black","blue"}} ;
 
-
-
+        for(int i = 0; i<=7 ;i++) {
+            for(int j= 0; j<=7; j++) {
+                if(!Objects.equals(currentBoard[i][j], initialBoard[i][j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

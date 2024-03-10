@@ -73,7 +73,7 @@ public class CheckersTests {
             Thread.sleep(3200);
             movesMade++;
             //check if we can still make moves - maybe the game ended
-            if(!checkersPage.canMakeMove() && !Objects.equals(checkersPage.getMessage(), "Please wait.")) {
+            if(!checkersPage.canMakeMove() && !Objects.equals(checkersPage.getMessage(), checkersPage.pleaseWaitMessage)) {
                 System.out.println("Game Over");
                 break;
 
@@ -97,10 +97,10 @@ public class CheckersTests {
         //checking initial message is back
         assert checkersPage.getMessage().equals(checkersPage.initialMessage);
         //checking if all pieces are into place based on image
+        assert checkersPage.checkInitialBoard(checkersPage.getCurrentBoard());
+
 
     }
-
-
 
     @AfterAll()
     void quit() {
