@@ -38,7 +38,7 @@ public class DeckOfCardsTests {
     @Order(2)
     void getDeck() {
        cardsPage.getNewDeck();
-       System.out.println(cardsPage.deckID);
+       System.out.println("Deck iD: " + cardsPage.deckID);
        //to test if the API was successful we will see if the deck id was set properly -> different from null
         assert cardsPage.deckID != null;
     }
@@ -54,6 +54,28 @@ public class DeckOfCardsTests {
         assert cardsPage.isShuffled;
         assert cardsPage.isShuffledWithSuccess;
 
+    }
+
+    @Test
+    @Order(4)
+    void dealThree() {
+        //first we will check if the deck was created, otherwise the other tests should fail as well so no need to continue
+        assert cardsPage.deckID != null;
+        cardsPage.dealThreeCards(1);
+        cardsPage.dealThreeCards(2);
+        //checking if cards were dealt successfully
+        assert cardsPage.playerOne != 0;
+        assert cardsPage.playerTwo != 0;
+
+        //wriitng out if any of the players have BlackJack i.e. their score is 21
+        if(cardsPage.playerOne == 21) {
+            System.out.println("=====WINNER======");
+            System.out.println("Player One Has Black Jack");
+        }
+        if(cardsPage.playerTwo == 21) {
+            System.out.println("=====WINNER======");
+            System.out.println("Player Two Has Black Jack");
+        }
     }
 
     @AfterAll()
